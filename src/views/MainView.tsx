@@ -1,5 +1,6 @@
 import { css } from 'goober';
 import type { Component } from 'solid-js';
+import IntegratedSwatches from '../components/IntegratedSwatches';
 
 const ctn = css({
   display: 'grid',
@@ -25,7 +26,7 @@ const sidebar = css({
 const MainView: Component = () => {
   return (
     <div class={ctn} data-testid="main-view">
-      <div class={swatches}>swatches</div>
+      <IntegratedSwatches class={swatches} />
       <div class={sidebar}>sidebar</div>
     </div>
   );

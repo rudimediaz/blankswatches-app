@@ -7,6 +7,7 @@ import App from './App';
 
 //styles
 import 'open-props/normalize';
+import { createHSL, SwatchesProvider } from './contexts/swatches';
 
 glob({
   body: {
@@ -14,11 +15,15 @@ glob({
   },
 });
 
+sessionStorage.setItem('initial_hsl', JSON.stringify(createHSL()));
+
 render(
   () => (
-    <Router>
-      <App />
-    </Router>
+    <SwatchesProvider>
+      <Router>
+        <App />
+      </Router>
+    </SwatchesProvider>
   ),
   document.getElementById('root')!
 );
