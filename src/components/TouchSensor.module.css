@@ -1,0 +1,10 @@
+.ctn {
+  position: relative;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: none;
+}
