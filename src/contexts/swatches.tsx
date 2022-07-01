@@ -1,15 +1,15 @@
-import { z } from 'zod';
 import defaultTo from 'lodash-es/defaultTo';
+import memoize from 'lodash-es/memoize';
+import pick from 'lodash-es/pick';
 import random from 'lodash-es/random';
-import { createStore, produce } from 'solid-js/store';
 import {
   createContext,
   createMemo,
-  type ParentProps,
   useContext,
+  type ParentProps,
 } from 'solid-js';
-import memoize from 'lodash-es/memoize';
-import merge from 'lodash-es/merge';
+import { createStore, produce } from 'solid-js/store';
+import { z } from 'zod';
 
 export const hslSchema = z.object({
   h: z.number().nonnegative(),
@@ -74,7 +74,9 @@ export function createSwatchesStore(initialHSL = INITIAL_HSL) {
   ] as const;
 }
 
-type SwatchesContextValue = ReturnType<typeof createSwatchesStore>;
+export type SwatchesContextValue = ReturnType<
+  typeof createSwatchesStore
+>;
 
 const SwatchesContext = createContext<SwatchesContextValue>();
 
@@ -137,9 +139,9 @@ export function createGradients(
 
   const value = createMemo(() => {
     const staticGradients = memoizedCreateStaticGradients(key);
-
+    const dynamic = pick(state.current, 'h', 's', 'l');
     const gradients = staticGradients.map((part) => {
-      return hslToString(merge(state.current, part));
+      return hslToString({ ...dynamic, ...part });
     });
 
     return gradients.join(', ');
