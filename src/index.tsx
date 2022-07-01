@@ -1,19 +1,11 @@
 /* @refresh reload */
 
-import { glob } from 'goober';
+import 'open-props/normalize';
 import { Router } from 'solid-app-router';
 import { render } from 'solid-js/web';
 import App from './App';
-
-//styles
-import 'open-props/normalize';
 import { createHSL, SwatchesProvider } from './contexts/swatches';
-
-glob({
-  body: {
-    fontFamily: `'Inter', system-ui`,
-  },
-});
+import './index.css';
 
 sessionStorage.setItem('initial_hsl', JSON.stringify(createHSL()));
 
