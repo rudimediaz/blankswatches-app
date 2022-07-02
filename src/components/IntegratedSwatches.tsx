@@ -1,6 +1,15 @@
 import { Motion, Presence } from '@motionone/solid';
+import debounce from 'lodash-es/debounce';
 import { spring } from 'motion';
-import { createMemo, onMount, Show, type Component } from 'solid-js';
+import rgbHex from 'rgb-hex';
+import {
+  createMemo,
+  createSignal,
+  onCleanup,
+  onMount,
+  Show,
+  type Component,
+} from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 import { useMedia } from '../composables/media';
 import {
@@ -11,6 +20,7 @@ import {
   useSwatchesContext,
   type HSL,
 } from '../contexts/swatches';
+import ColorName from './ColorName';
 import c from './IntegratedSwatches.module.css';
 import TouchSensor, {
   type SenseInit,
@@ -31,9 +41,26 @@ const variantMax = {
   l: 100,
 };
 
+function createHexRetriever<T extends HTMLElement>() {
+  const [hex, setHex] = createSignal('');
+  const callback: MutationCallback = (records) => {
+    let rawRGB = (records[0].target as T).style.backgroundColor;
+    setHex(rgbHex(rawRGB));
+  };
+
+  const debouncedCallback = debounce(callback, 1000, {
+    maxWait: 1000 * 60,
+  });
+
+  const observer = new MutationObserver(debouncedCallback);
+
+  return [hex, observer] as const;
+}
+
 const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
   props
 ) => {
+  let containerRef: HTMLDivElement;
   const context = useSwatchesContext();
   const hslString = createHSLString(context);
   const [swatches, { boot, updateCurrent }] = context;
@@ -42,8 +69,8 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
     target: null as keyof HSL | null,
     moved: false,
   });
+  const [hex, observer] = createHexRetriever();
   const largeScreen = useMedia('(min-width : 1024px)');
-
   const active = createMemo(() => {
     return largeScreen() ? false : true;
   });
@@ -65,6 +92,14 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
     } catch (_error) {
       boot(createHSL());
     }
+  });
+
+  onMount(() => {
+    observer.observe(containerRef, { attributeFilter: ['style'] });
+
+    onCleanup(() => {
+      observer.disconnect();
+    });
   });
 
   const handleSlide = (detail: SlideInit) => {
@@ -113,6 +148,7 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
 
   return (
     <div
+      ref={containerRef!}
       class={`${props.class} ${c.ctn}`}
       style={{ 'background-color': hslString() }}
     >
@@ -163,6 +199,13 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
         onSlide={handleSlide}
         onSense={handleSense}
       />
+      <Motion.div
+        animate={{ opacity: [0, 1] }}
+        transition={{ delay: 1, duration: 0.4, easing: 'ease-in' }}
+        class={c.ctn_colorinfo}
+      >
+        <ColorName hex={hex()} />
+      </Motion.div>
     </div>
   );
 };
