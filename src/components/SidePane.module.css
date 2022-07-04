@@ -1,0 +1,15 @@
+.ctn {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content 1fr max-content;
+  row-gap: var(--size-4);
+  box-shadow: var(--inner-shadow-2);
+}
+
+.ctn_content {
+  padding-inline: var(--size-2);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 40% 1fr;
+  row-gap: var(--size-4);
+}

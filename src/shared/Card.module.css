@@ -1,0 +1,6 @@
+.ctn {
+  border-radius: var(--radius-3);
+  background-color: white;
+  box-shadow: var(--shadow-3);
+  padding: var(--size-2);
+}
