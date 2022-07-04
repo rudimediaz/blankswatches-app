@@ -158,3 +158,7 @@ export const SwatchesProvider = (props: ParentProps) => {
     </SwatchesContext.Provider>
   );
 };
+
+export function formatGradient(colors: string) {
+  return `linear-gradient(to right, ${colors})`;
+}
