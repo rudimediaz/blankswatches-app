@@ -3,8 +3,10 @@ import debounce from 'lodash-es/debounce';
 import { spring } from 'motion';
 import rgbHex from 'rgb-hex';
 import {
+  createEffect,
   createMemo,
   createSignal,
+  on,
   onCleanup,
   onMount,
   Show,
@@ -63,7 +65,8 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
   let containerRef: HTMLDivElement;
   const context = useSwatchesContext();
   const hslString = createHSLString(context);
-  const [swatches, { boot, updateCurrent }] = context;
+  const [swatches, { boot, updateCurrent, resumeFromLargeScreen }] =
+    context;
   const [sensorActivity, setSensorActivity] = createStore({
     engaged: false,
     target: null as keyof HSL | null,
@@ -101,6 +104,14 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
       observer.disconnect();
     });
   });
+
+  createEffect(
+    on(largeScreen, (current, prev) => {
+      if (prev === true && current === false) {
+        resumeFromLargeScreen();
+      }
+    })
+  );
 
   const handleSlide = (detail: SlideInit) => {
     updateCurrent({
