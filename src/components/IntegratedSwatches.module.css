@@ -40,7 +40,7 @@
 }
 
 .floating_info input[type='range']::-webkit-slider-runnable-track {
-  background: var(--grad);
+  background: var(--context-gradients);
   border-radius: var(--radius-3);
   border: 1px solid var(--gray-4);
 }

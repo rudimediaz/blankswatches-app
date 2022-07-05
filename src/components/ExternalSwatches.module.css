@@ -23,10 +23,11 @@
 .form_control input[type='range'] {
   -webkit-appearance: none;
   background: none;
+  cursor: default;
 }
 
 .form_control input[type='range']::-webkit-slider-runnable-track {
-  background: var(--slider-grad);
+  background: var(--context-gradients);
   border-radius: var(--radius-3);
   box-shadow: var(--shadow-4);
   transition: box-shadow 0.4s ease-in-out 0.2s;
@@ -34,8 +35,6 @@
 
 .form_control
   input[type='range']:focus::-webkit-slider-runnable-track {
-  background: var(--slider-grad);
-  border-radius: var(--radius-3);
   box-shadow: var(--shadow-6);
 }
 

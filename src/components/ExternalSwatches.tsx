@@ -2,16 +2,12 @@ import {
   createUniqueId,
   type JSX,
   type Component,
-  createMemo,
   createSignal,
 } from 'solid-js';
-import {
-  createGradients,
-  formatGradient,
-  useSwatchesContext,
-} from '../contexts/swatches';
+import { useSwatchesContext } from '../contexts/swatches';
 import Card from '../shared/Card';
 import c from './ExternalSwatches.module.css';
+import Gradients from './Gradients';
 
 type SliderInputInit = {
   value: number;
@@ -66,7 +62,7 @@ const FormControl: Component<FormControlProps> = (props) => {
   };
 
   return (
-    <>
+    <Gradients swatchesKey={props.swatchesType}>
       <label classList={{ [c.focused]: focused() }} for={id}>
         {props.label}
       </label>
@@ -80,26 +76,13 @@ const FormControl: Component<FormControlProps> = (props) => {
         onBlur={() => setFocused(false)}
         onDblClick={handleDbClick}
       />
-    </>
+    </Gradients>
   );
 };
 
 const ExternalSwatches: Component = () => {
   const swatchesContext = useSwatchesContext();
   const [state, { updateCurrent }] = swatchesContext;
-  const hueGradient = createGradients('h', swatchesContext);
-  const formattedHueGradient = createMemo(() =>
-    formatGradient(hueGradient())
-  );
-  const satGradient = createGradients('s', swatchesContext);
-  const formattedSatGradient = createMemo(() =>
-    formatGradient(satGradient())
-  );
-
-  const ligGradient = createGradients('l', swatchesContext);
-  const formattedLigGradient = createMemo(() =>
-    formatGradient(ligGradient())
-  );
 
   const handleInput = (init: SliderInputInit) => {
     updateCurrent({
@@ -108,10 +91,7 @@ const ExternalSwatches: Component = () => {
   };
   return (
     <Card class={c.ctn}>
-      <div
-        class={c.form_control}
-        style={{ '--slider-grad': formattedHueGradient() }}
-      >
+      <div class={c.form_control}>
         <FormControl
           label="Hue"
           value={state.current.h}
@@ -119,10 +99,7 @@ const ExternalSwatches: Component = () => {
           onInput={handleInput}
         />
       </div>
-      <div
-        class={c.form_control}
-        style={{ '--slider-grad': formattedSatGradient() }}
-      >
+      <div class={c.form_control}>
         <FormControl
           label="Saturation"
           value={state.current.s}
@@ -130,10 +107,7 @@ const ExternalSwatches: Component = () => {
           onInput={handleInput}
         />
       </div>
-      <div
-        class={c.form_control}
-        style={{ '--slider-grad': formattedLigGradient() }}
-      >
+      <div class={c.form_control}>
         <FormControl
           label="Lightness"
           value={state.current.l}

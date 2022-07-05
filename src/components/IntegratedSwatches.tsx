@@ -15,7 +15,6 @@ import {
 import { createStore, produce } from 'solid-js/store';
 import { useMedia } from '../composables/media';
 import {
-  createGradients,
   createHSL,
   createHSLString,
   hslSchema,
@@ -23,6 +22,7 @@ import {
   type HSL,
 } from '../contexts/swatches';
 import ColorName from './ColorName';
+import Gradients from './Gradients';
 import c from './IntegratedSwatches.module.css';
 import TouchSensor, {
   type SenseInit,
@@ -32,10 +32,6 @@ import TouchSensor, {
 type IntegratedSwatchesProps = {
   class?: string;
 };
-
-function formatGradient(colors: string) {
-  return `linear-gradient(to right, ${colors})`;
-}
 
 const variantMax = {
   h: 360,
@@ -129,18 +125,6 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
     );
   };
 
-  const hueGradients = createGradients('h', context);
-  const saturationGradients = createGradients('s', context);
-  const lightnessGradients = createGradients('l', context);
-
-  const gradient = createMemo(() => {
-    return {
-      h: formatGradient(hueGradients()),
-      s: formatGradient(saturationGradients()),
-      l: formatGradient(lightnessGradients()),
-    };
-  });
-
   const adjusting = createMemo(() => {
     if (
       sensorActivity.engaged &&
@@ -166,20 +150,21 @@ const IntegratedSwatches: Component<IntegratedSwatchesProps> = (
       <Presence exitBeforeEnter>
         <Show when={adjusting()}>
           {(val) => (
-            <Motion.div
-              class={c.floating_info}
-              style={{ '--grad': gradient()[val.target] }}
-              animate={{ opacity: [0, 1], y: [-100, 0] }}
-              transition={{ easing: spring() }}
-              exit={{ opacity: 0, y: -100 }}
-            >
-              <input
-                type="range"
-                value={swatches.current[val.target]}
-                readOnly={true}
-                max={val.max}
-              />
-            </Motion.div>
+            <Gradients swatchesKey={val.target}>
+              <Motion.div
+                class={c.floating_info}
+                animate={{ opacity: [0, 1], y: [-100, 0] }}
+                transition={{ easing: spring() }}
+                exit={{ opacity: 0, y: -100 }}
+              >
+                <input
+                  type="range"
+                  value={swatches.current[val.target]}
+                  readOnly={true}
+                  max={val.max}
+                />
+              </Motion.div>
+            </Gradients>
           )}
         </Show>
       </Presence>
