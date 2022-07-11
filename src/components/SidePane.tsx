@@ -2,6 +2,7 @@ import { type Component } from 'solid-js';
 import Card from '../shared/Card';
 import ExternalSwatches from './ExternalSwatches';
 import c from './SidePane.module.css';
+import TabbedWidget from './TabbedWidget';
 
 const SidePane: Component = () => {
   return (
@@ -9,7 +10,7 @@ const SidePane: Component = () => {
       <div>{''}</div>
       <div class={c.ctn_content}>
         <ExternalSwatches />
-        <Card>info</Card>
+        <TabbedWidget />
       </div>
       <div>{''}</div>
     </div>

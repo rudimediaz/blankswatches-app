@@ -82,6 +82,16 @@ export function useColorQuery(hex: Accessor<string>) {
   return [resource, utils] as const;
 }
 
+export function useColorContext() {
+  const context = useContext(ColorContext);
+
+  if (!context) {
+    throw new Error('not in scoped');
+  } else {
+    return context;
+  }
+}
+
 export const ColorProvider = (props: ParentProps) => {
   const value = createColorResource();
 
