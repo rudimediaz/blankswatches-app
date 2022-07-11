@@ -1,24 +1,24 @@
 /* @refresh reload */
 
-import { glob } from 'goober';
+import 'open-props/normalize';
 import { Router } from 'solid-app-router';
 import { render } from 'solid-js/web';
 import App from './App';
+import { ColorProvider } from './contexts/color';
+import { createHSL, SwatchesProvider } from './contexts/swatches';
+import './index.css';
 
-//styles
-import 'open-props/normalize';
-
-glob({
-  body: {
-    fontFamily: `'Inter', system-ui`,
-  },
-});
+sessionStorage.setItem('initial_hsl', JSON.stringify(createHSL()));
 
 render(
   () => (
-    <Router>
-      <App />
-    </Router>
+    <SwatchesProvider>
+      <ColorProvider>
+        <Router>
+          <App />
+        </Router>
+      </ColorProvider>
+    </SwatchesProvider>
   ),
   document.getElementById('root')!
 );

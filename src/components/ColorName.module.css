@@ -1,0 +1,31 @@
+.namespan {
+  font-family: 'Josefin Sans', system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--gray-1);
+  font-size: var(--font-size-fluid-3);
+  font-weight: 600;
+  text-align: center;
+}
+
+.namespan.highcontrast {
+  color: var(--gray-9);
+}
+
+.ctn_point {
+  display: flex;
+  justify-content: space-between;
+  width: var(--size-fluid-8);
+}
+
+.ctn_point.highcontrast .point {
+  background-color: var(--gray-9);
+}
+
+.point {
+  width: var(--size-4);
+  height: var(--size-4);
+  background-color: var(--gray-1);
+  border-radius: 50px;
+  opacity: 0.6;
+}
